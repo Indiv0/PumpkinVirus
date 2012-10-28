@@ -1,0 +1,6 @@
+name: PumpkinVirus
+main: com.github.Indiv0.PumpkinVirus.PumpkinVirus
+version: 1.0
+author: Indiv0
+description: A plugin which allows the spread of pumpkins.
+dev-url: http://github.com/Indiv0/PumpkinVirus/
