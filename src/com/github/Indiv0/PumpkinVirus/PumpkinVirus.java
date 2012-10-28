@@ -3,6 +3,7 @@ package com.github.Indiv0.PumpkinVirus;
 import java.io.IOException;
 import java.util.logging.Level;
 
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.MetricsLite;
 
@@ -11,6 +12,14 @@ public class PumpkinVirus extends JavaPlugin {
     public void onLoad() {
         // Enable PluginMetrics.
         enableMetrics();
+    }
+
+    @Override
+    public void onEnable() {
+        // Prints a message to the server confirming successful initialization
+        // of the plugin.
+        PluginDescriptionFile pdfFile = getDescription();
+        getLogger().info(pdfFile.getName() + " " + pdfFile.getVersion() + " is enabled.");
     }
 
     private void enableMetrics()
