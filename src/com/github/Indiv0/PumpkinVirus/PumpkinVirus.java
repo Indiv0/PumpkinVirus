@@ -11,8 +11,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.MetricsLite;
 
 public class PumpkinVirus extends JavaPlugin {
+    private final BlockPlaceListener blockPlaceListener = new BlockPlaceListener(this);
+    // Stores whether or not pumpkins are currently spreading.
     private boolean isPumpkinSpreadEnabled = false;
-    private BlockPlaceListener blockPlaceListener;
 
     @Override
     public void onLoad() {
@@ -73,5 +74,9 @@ public class PumpkinVirus extends JavaPlugin {
     public void logException(Exception ex, Level level, String message) {
         ex.printStackTrace(System.out);
         getLogger().log(level, message);
+    }
+
+    public boolean getPumpkinSpreadStatus() {
+        return isPumpkinSpreadEnabled;
     }
 }
