@@ -1,3 +1,7 @@
+/**
+ *
+ * @author Indivisible0
+ */
 package com.github.Indiv0.PumpkinVirus;
 
 import java.util.Random;
