@@ -28,8 +28,7 @@ public class BlockPlaceListener implements Listener {
         if (block.getType() != Material.PUMPKIN)
             return;
 
-        // Creates a new pumpkin and tells it to spread.
-        Pumpkin pumpkin = new Pumpkin(plugin);
-        pumpkin.pumpkinSpread(pumpkin, block);
+        // Attempts to spread a pumpkin.
+        plugin.setPumpkinSpreadTimer(block);
     }
 }

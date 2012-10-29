@@ -5,8 +5,11 @@
 package com.github.Indiv0.PumpkinVirus;
 
 import java.io.IOException;
+import java.util.Random;
 import java.util.logging.Level;
 
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -18,6 +21,7 @@ public class PumpkinVirus extends JavaPlugin {
     private final BlockPlaceListener blockPlaceListener = new BlockPlaceListener(this);
     // Stores whether or not pumpkins are currently spreading.
     private boolean isPumpkinSpreadEnabled = false;
+    private final long ticks = 5;
 
     @Override
     public void onLoad() {
@@ -82,5 +86,90 @@ public class PumpkinVirus extends JavaPlugin {
 
     public boolean getPumpkinSpreadStatus() {
         return isPumpkinSpreadEnabled;
+    }
+
+    public void setPumpkinSpreadTimer(final Block block) {
+        // Creates an Async task, which when run, spreads a pumpkin.
+        getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    // Checks to make sure pumpkins are allowed to spread.
+                    if (getPumpkinSpreadStatus() == false)
+                        return;
+
+                    Random randomGenerator = new Random();
+
+                    // Determine the direction in which to spread the plugins.
+                    int randX = randomGenerator.nextInt(2);
+                    int randY = randomGenerator.nextInt(2);
+                    int randZ = randomGenerator.nextInt(2);
+
+                    // Determines the direction using random boolean values.
+                    boolean dirX = randomGenerator.nextBoolean();
+                    boolean dirY = randomGenerator.nextBoolean();
+                    boolean dirZ = randomGenerator.nextBoolean();
+
+                    // Instantializes the new coordinates, which the pumpkin
+                    // will spread to.
+                    int newX;
+                    int newY;
+                    int newZ;
+
+                    // Based on the directions, adds or subtracts the randomly
+                    // generated values in order to move the location at which
+                    // the next pumpkin will be spawned.
+                    if (dirX == true)
+                        newX = block.getX() + randX;
+                    else
+                        newX = block.getX() - randX;
+
+                    if (dirY == true)
+                        newY = block.getY() + randY;
+                    else
+                        newY = block.getY() - randY;
+
+                    if (dirZ == true)
+                        newZ = block.getZ() + randZ;
+                    else
+                        newZ = block.getZ() - randZ;
+
+                    // Gets the block to be converted, as well as its material.
+                    Block targetBlock = block.getWorld().getBlockAt(newX, newY, newZ);
+                    Material targetBlockMaterial = targetBlock.getType();
+
+                    // If the block is not air, then attempt to create a pumpkin
+                    // there once again.
+                    if (targetBlockMaterial != Material.AIR) {
+                        setPumpkinSpreadTimer(block);
+                        return;
+                    }
+
+                    // Gets the material 3 blocks under the target block.
+                    Material baseBlockMaterial = block.getWorld().getBlockAt(newX, newY - 3, newZ).getType();
+
+                    // If the material of the block acting as "support"
+                    // underneath the one being targetted is not considered to
+                    // be a valid support, then we must retry the creation of
+                    // the pumpkin, so as not to allow the pumpkins to rise too
+                    // far above the ground.
+                    if (baseBlockMaterial == Material.AIR ||
+                            baseBlockMaterial == Material.PUMPKIN ||
+                            baseBlockMaterial == Material.WATER ||
+                            baseBlockMaterial == Material.LAVA) {
+                        setPumpkinSpreadTimer(block);
+                        return;
+                    }
+
+                    // Converts the target block to a pumpkin.
+                    targetBlock.setType(Material.PUMPKIN);
+
+                    // Spreads a new pumpkin from the target location.
+                    setPumpkinSpreadTimer(targetBlock);
+                } catch (Exception ex) {
+                    logException(ex, Level.WARNING, "Failed to spread pumpkins.");
+                }
+            }
+        }, ticks);
     }
 }
