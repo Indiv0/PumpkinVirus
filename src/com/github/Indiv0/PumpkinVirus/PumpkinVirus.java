@@ -6,11 +6,13 @@ import java.util.logging.Level;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.MetricsLite;
 
 public class PumpkinVirus extends JavaPlugin {
     private boolean isPumpkinSpreadEnabled = false;
+    private BlockPlaceListener blockPlaceListener;
 
     @Override
     public void onLoad() {
@@ -20,6 +22,12 @@ public class PumpkinVirus extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        // Retrieves an instance of the PluginManager.
+        PluginManager pm = getServer().getPluginManager();
+
+        // Registers the blockListener with the PluginManager.
+        pm.registerEvents(blockPlaceListener, this);
+
         // Prints a message to the server confirming successful initialization
         // of the plugin.
         PluginDescriptionFile pdfFile = getDescription();
