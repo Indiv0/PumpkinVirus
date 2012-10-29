@@ -4,3 +4,10 @@ version: 1.0
 author: Indiv0
 description: A plugin which allows the spread of pumpkins.
 dev-url: http://github.com/Indiv0/PumpkinVirus/
+
+commands:
+  pumpkinvirus:
+    description: This command controls all functions of the PumpkinVirus plugin.
+    usage: /<command>
+    permission: pumpkinvirus.use
+    permission-message: Sorry, you don't have permission to use PumpkinVirus
