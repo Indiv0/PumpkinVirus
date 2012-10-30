@@ -1,0 +1,20 @@
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
+#  Configuration file for "PumpkinVirus".  #
+#  @author Nikita Pekin (Indivisible0)     #
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
+
+#======== Pumpkin Settings ==========#
+
+## Regulates the speed at which pumpkins spread/duplicate.
+# (Note: this is an interval, counted in ticks, between duplications.)
+pumpkinSpeed: 5
+
+## Determines whether or not the pumpkins will attempt to hunt down and kill players by suffocation.
+trackingPlayers: false
+
+## Sets the maximum height that pumpkins can be above ground.
+# (Note: liquids, air, and pumpkins do not count as ground in this scenario.)
+maxHeightOffGround: 3
+
+## Determines whether or not pumpkins are allowed to spread/duplicate.
+spreadEnabled: false
