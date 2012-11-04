@@ -14,7 +14,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.mcstats.MetricsLite;
+
+import com.github.Indiv0.PumpkinVirus.util.Metrics;
 
 public class PumpkinVirus extends JavaPlugin {
     private final BlockPlaceListener blockPlaceListener = new BlockPlaceListener(this);
@@ -66,7 +67,7 @@ public class PumpkinVirus extends JavaPlugin {
     private void enableMetrics()
     {
         try {
-            MetricsLite metrics = new MetricsLite(this);
+            Metrics metrics = new Metrics(this);
             metrics.start();
         } catch (IOException ex) {
             logException(ex, Level.WARNING, "An error occured while attempting to connect to PluginMetrics.");
