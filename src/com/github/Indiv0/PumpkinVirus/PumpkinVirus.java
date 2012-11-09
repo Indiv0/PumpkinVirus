@@ -39,6 +39,12 @@ public class PumpkinVirus extends JavaPlugin {
     }
 
     @Override
+    public void onDisable() {
+        // Cancels any tasks scheduled by this plugin.
+        getServer().getScheduler().cancelTasks(this);
+    }
+
+    @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         // Checks to see if the command is the "/pumpkinvirus" command.
         if (!cmd.getName().equalsIgnoreCase("pumpkinvirus")) return false;
