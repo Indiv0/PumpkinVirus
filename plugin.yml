@@ -8,6 +8,18 @@ dev-url: http://github.com/Indiv0/PumpkinVirus/
 commands:
   pumpkinvirus:
     description: This command controls all functions of the PumpkinVirus plugin.
-    usage: /<command>
+    usage: |
+      /<command>
+      Example: /<command> - Toggles whether or not pumpkin spread is enabled.
+    aliases: [pv, pumpkin_virus, pumpkinVirus]
     permission: pumpkinvirus.use
     permission-message: Sorry, you don't have permission to use PumpkinVirus
+
+permissions:
+  pumpkinvirus.*:
+    description: Controls all PumpkinVirus permissions
+    children:
+      pumpkinvirus.use: true
+  pumpkinvirus.use:
+    description: Controls whether or not the user can toggle the spread of pumpkins.
+    default: true
