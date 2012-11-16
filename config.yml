@@ -3,18 +3,21 @@
 #  @author Nikita Pekin (Indivisible0)     #
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
 
-#======== Pumpkin Settings ==========#
+#======== Virus Settings ==========#
 
-## Regulates the speed at which pumpkins spread/duplicate.
+## Regulates the speed at which the virus will spread/duplicate.
 # (Note: this is an interval, counted in ticks, between duplications.)
-pumpkinSpeed: 5
+spreadSettings: 5
 
-## Determines whether or not the pumpkins will attempt to hunt down and kill players by suffocation.
+## Determines whether or not the virus will attempt to hunt down and kill players by suffocation.
 trackingPlayers: false
 
-## Sets the maximum height that pumpkins can be above ground.
-# (Note: liquids, air, and pumpkins do not count as ground in this scenario.)
+## Sets the maximum height that virus blocks can be above ground.
+# (Note: liquids, air, and the virus itself does not count as ground in this scenario.)
 maxHeightOffGround: 3
 
-## Determines whether or not pumpkins are allowed to spread/duplicate.
+## Determines whether or not the virus is allowed to spread/duplicate.
 spreadEnabled: false
+
+## The block to be used as the virus
+virusID: pumpkin
