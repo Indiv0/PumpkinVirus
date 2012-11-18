@@ -1,13 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.github.Indiv0</groupId>
   <artifactId>pumpkinvirus</artifactId>
   <version>1.1.0</version>
-  <name>PumpkinVirus</name>
-  <url>http://dev.bukkit.org/server-mods/pumpkinvirus/</url>
-  <description>A Bukkit plugin which allows for blocks to spread.</description>
   <packaging>jar</packaging>
+  <name>PumpkinVirus</name>
+  <description>A Bukkit plugin which allows for blocks to spread.</description>
+  <url>http://dev.bukkit.org/server-mods/pumpkinvirus/</url>
 
   <!-- Repositories -->
   <repositories>
@@ -43,6 +44,12 @@
 
   <build>
     <sourceDirectory>src</sourceDirectory>
+    <resources>
+        <resource>
+            <directory>src/main/resources/</directory>
+            <filtering>true</filtering>
+        </resource>
+    </resources>
 
     <!-- Plugins -->
     <plugins>
