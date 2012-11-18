@@ -8,6 +8,8 @@ import java.io.IOException;
 
 import org.bukkit.plugin.Plugin;
 
+import com.github.Indiv0.BukkitUtils.Metrics;
+
 public class MetricsUtil extends Util {
     public static void initialize(Plugin parent) {
         Util.initialize(parent);
