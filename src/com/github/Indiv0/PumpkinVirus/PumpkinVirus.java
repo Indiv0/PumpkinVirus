@@ -15,7 +15,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.github.Indiv0.util.Metrics;
+import com.github.Indiv0.BukkitUtils.Metrics;
 
 public class PumpkinVirus extends JavaPlugin {
     private final BlockPlaceListener blockPlaceListener = new BlockPlaceListener(this);
