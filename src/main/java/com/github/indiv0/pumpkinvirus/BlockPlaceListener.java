@@ -2,7 +2,7 @@
  *
  * @author Indivisible0
  */
-package com.github.Indiv0.PumpkinVirus;
+package com.github.indiv0.pumpkinvirus;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
