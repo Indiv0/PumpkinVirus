@@ -4,7 +4,6 @@
  */
 package com.github.indiv0.pumpkinvirus;
 
-import java.io.IOException;
 import java.util.Random;
 import java.util.logging.Level;
 
@@ -12,30 +11,26 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.github.indiv0.bukkitutils.Metrics;
+import com.github.indiv0.bukkitutils.UtilManager;
 
 public class PumpkinVirus extends JavaPlugin {
-    private final BlockPlaceListener blockPlaceListener = new BlockPlaceListener(this);
+    private final UtilManager utilManager = new UtilManager();
+    private final int CONFIG_VERSION = 1;
     // Stores whether or not pumpkins are currently spreading.
     private boolean isPumpkinSpreadEnabled = false;
     private final long ticks = 5;
 
     @Override
     public void onLoad() {
-        // Enable PluginMetrics.
-        enableMetrics();
+        // Initialize all utilities.
+        utilManager.initialize(this, CONFIG_VERSION);
     }
 
     @Override
     public void onEnable() {
-        // Retrieves an instance of the PluginManager.
-        PluginManager pm = getServer().getPluginManager();
-
-        // Registers the blockListener with the PluginManager.
-        pm.registerEvents(blockPlaceListener, this);
+        utilManager.getListenerUtil().registerListener(new BlockPlaceListener(this));
     }
 
     @Override
@@ -68,21 +63,6 @@ public class PumpkinVirus extends JavaPlugin {
         sender.sendMessage("To use PumpkinVirus, type \"/pumpkinvirus\" followed by no arguments.");
 
         return false;
-    }
-
-    private void enableMetrics()
-    {
-        try {
-            Metrics metrics = new Metrics(this);
-            metrics.start();
-        } catch (IOException ex) {
-            logException(ex, Level.WARNING, "An error occured while attempting to connect to PluginMetrics.");
-        }
-    }
-
-    public void logException(Exception ex, Level level, String message) {
-        ex.printStackTrace(System.out);
-        getLogger().log(level, message);
     }
 
     public boolean getPumpkinSpreadStatus() {
@@ -168,7 +148,7 @@ public class PumpkinVirus extends JavaPlugin {
                     // Spreads a new pumpkin from the target location.
                     setPumpkinSpreadTimer(targetBlock);
                 } catch (Exception ex) {
-                    logException(ex, Level.WARNING, "Failed to spread pumpkins.");
+                    utilManager.getLogUtil().logException(Level.WARNING, "Failed to spread pumpkins.");
                 }
             }
         }, ticks);
