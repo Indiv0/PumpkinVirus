@@ -21,3 +21,9 @@ spreadEnabled: false
 
 ## The block to be used as the virus
 virusID: pumpkin
+
+###############################################
+##   Internal Settings (Read: DO NOT EDIT)   ##
+###############################################
+
+version: 1
