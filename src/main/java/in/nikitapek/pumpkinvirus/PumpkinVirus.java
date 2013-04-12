@@ -2,7 +2,9 @@
  *
  * @author Indivisible0
  */
-package com.github.indiv0.pumpkinvirus;
+package in.nikitapek.pumpkinvirus;
+
+import in.nikitapek.bukkitutils.UtilManager;
 
 import java.util.Random;
 import java.util.logging.Level;
@@ -12,8 +14,6 @@ import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import com.github.indiv0.bukkitutils.UtilManager;
 
 public class PumpkinVirus extends JavaPlugin {
     private final UtilManager utilManager = new UtilManager();
