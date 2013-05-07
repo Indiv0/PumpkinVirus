@@ -7,7 +7,7 @@
 
 ## Regulates the speed at which the virus will spread/duplicate.
 # (Note: this is an interval, counted in ticks, between duplications.)
-spreadSettings: 5
+spreadSpeed: 5
 
 ## Determines whether or not the virus will attempt to hunt down and kill players by suffocation.
 trackingPlayers: false
@@ -20,10 +20,4 @@ maxHeightOffGround: 3
 spreadEnabled: false
 
 ## The block to be used as the virus
-virusID: pumpkin
-
-###############################################
-##   Internal Settings (Read: DO NOT EDIT)   ##
-###############################################
-
-version: 1
+virusBlockID: pumpkin
