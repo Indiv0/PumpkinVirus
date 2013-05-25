@@ -8,11 +8,11 @@ import org.bukkit.Bukkit;
 
 import com.amshulman.mbapi.MbapiPlugin;
 
-public class PumpkinVirusPlugin extends MbapiPlugin {
+public final class PumpkinVirusPlugin extends MbapiPlugin {
+    private final PumpkinVirusConfigurationContext configurationContext = new PumpkinVirusConfigurationContext(this);
+
     @Override
     public void onEnable() {
-        PumpkinVirusConfigurationContext configurationContext = new PumpkinVirusConfigurationContext(this);
-
         registerEventHandler(new PumpkinVirusListener(configurationContext));
         registerCommandExecutor(new CommandPumpkinVirus(configurationContext));
 

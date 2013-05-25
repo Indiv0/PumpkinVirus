@@ -3,12 +3,12 @@ package in.nikitapek.pumpkinvirus.util;
 import com.amshulman.mbapi.MbapiPlugin;
 import com.amshulman.mbapi.util.ConfigurationContext;
 
-public class PumpkinVirusConfigurationContext extends ConfigurationContext {
+public final class PumpkinVirusConfigurationContext extends ConfigurationContext {
     // Stores whether or not pumpkins are currently spreading.
+    public final int ticks;
     public boolean isPumpkinSpreadEnabled;
-    public final long ticks;
 
-    public PumpkinVirusConfigurationContext(MbapiPlugin plugin) {
+    public PumpkinVirusConfigurationContext(final MbapiPlugin plugin) {
         super(plugin);
 
         plugin.saveDefaultConfig();

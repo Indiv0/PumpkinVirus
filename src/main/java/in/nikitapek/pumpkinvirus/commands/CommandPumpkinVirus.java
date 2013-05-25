@@ -10,7 +10,7 @@ import com.amshulman.mbapi.commands.PlayerOnlyCommand;
 import com.amshulman.typesafety.TypeSafeCollections;
 import com.amshulman.typesafety.TypeSafeList;
 
-public class CommandPumpkinVirus extends PlayerOnlyCommand {
+public final class CommandPumpkinVirus extends PlayerOnlyCommand {
     private final PumpkinVirusConfigurationContext configurationContext;
 
     public CommandPumpkinVirus(final PumpkinVirusConfigurationContext configurationContext) {
@@ -20,22 +20,16 @@ public class CommandPumpkinVirus extends PlayerOnlyCommand {
     }
 
     @Override
-    protected boolean executeForPlayer(Player player, TypeSafeList<String> args) {
-        // Makes sure at least one argument has been provided.
-        if (args.size() == 0) {
-            configurationContext.isPumpkinSpreadEnabled = !configurationContext.isPumpkinSpreadEnabled;
+    protected boolean executeForPlayer(final Player player, final TypeSafeList<String> args) {
+        configurationContext.isPumpkinSpreadEnabled = !configurationContext.isPumpkinSpreadEnabled;
 
-            if (configurationContext.isPumpkinSpreadEnabled)
-                player.sendMessage("Pumpkins are now spreading!");
-            else
-                player.sendMessage("Pumpkins are no longer spreading!");
-
-            return true;
+        if (configurationContext.isPumpkinSpreadEnabled) {
+            player.sendMessage("Pumpkins are now spreading!");
+        } else {
+            player.sendMessage("Pumpkins are no longer spreading!");
         }
 
-        player.sendMessage("To use PumpkinVirus, type \"/pumpkinvirus\" followed by no arguments.");
-
-        return false;
+        return true;
     }
 
     @Override
