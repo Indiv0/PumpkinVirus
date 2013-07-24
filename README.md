@@ -1,4 +1,4 @@
-PumpkinVirus [![Travis CI](https://secure.travis-ci.org/Indiv0/PumpkinVirus.png)](http://travis-ci.org/#!/Indiv0/PumpkinVirus)
+PumpkinVirus [![Travis CI](https://secure.travis-ci.org/Indiv0/pumpkin-virus.png)](http://travis-ci.org/#!/Indiv0/pumpkin-virus)
 ===
 
 A plugin for CraftBukkit which allows for pumpkins to spread.
