@@ -46,7 +46,7 @@ public class PumpkinVirusSpreader implements Runnable {
         }
 
         // If the block is not air, then attempt to create a pumpkin there once again.
-        if (targetBlock.getType() != Material.AIR) {
+        if (!Material.AIR.equals(targetBlock.getType())) {
             spreadPumpkins(configurationContext, block);
             return;
         }
@@ -59,10 +59,10 @@ public class PumpkinVirusSpreader implements Runnable {
         // be a valid support, then we must retry the creation of
         // the pumpkin, so as not to allow the pumpkins to rise too
         // far above the ground.
-        if (baseBlockMaterial == Material.AIR ||
-                baseBlockMaterial == Material.PUMPKIN ||
-                baseBlockMaterial == Material.WATER ||
-                baseBlockMaterial == Material.LAVA) {
+        if (Material.AIR.equals(baseBlockMaterial)  ||
+                Material.PUMPKIN.equals(baseBlockMaterial)  ||
+                Material.WATER.equals(baseBlockMaterial)  ||
+                Material.LAVA.equals(baseBlockMaterial)) {
             spreadPumpkins(configurationContext, block);
             return;
         }

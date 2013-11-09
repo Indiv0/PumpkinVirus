@@ -2,7 +2,6 @@ package in.nikitapek.pumpkinvirus.events;
 
 import in.nikitapek.pumpkinvirus.util.PumpkinVirusConfigurationContext;
 import in.nikitapek.pumpkinvirus.util.PumpkinVirusSpreader;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,7 +22,7 @@ public final class PumpkinVirusListener implements Listener {
             return;
         }
 
-        if (block.getType() != Material.PUMPKIN) {
+        if (!block.getType().equals(configurationContext.virusBlockType) || !block.getType().equals(configurationContext.antiVirusBlockType)) {
             return;
         }
 
