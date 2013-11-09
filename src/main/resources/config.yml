@@ -45,6 +45,10 @@ antiVirusDecayTime: 5000
 # Default: true
 virusBurrowing: true
 
+## The radius within which to track players if trackingPlayers is enabled.
+# Default: 50
+playerTrackingRadius: 50
+
 
 #======== Worlds ========#
 

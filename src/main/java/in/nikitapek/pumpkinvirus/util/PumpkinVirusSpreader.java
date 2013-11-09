@@ -1,9 +1,15 @@
 package in.nikitapek.pumpkinvirus.util;
 
+import in.nikitapek.pumpkinvirus.util.astar.AStar;
+import in.nikitapek.pumpkinvirus.util.astar.PathingResult;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
 
 public class PumpkinVirusSpreader implements Runnable {
@@ -93,6 +99,23 @@ public class PumpkinVirusSpreader implements Runnable {
     }
 
     private static Block getToBlock(Block fromBlock) {
+        Location location = fromBlock.getLocation();
+
+        if (configurationContext.trackingPlayers) {
+            Player nearestPlayer = getNearestPlayer(location);
+
+            if (nearestPlayer != null) {
+                AStar aStar = null;
+                try {
+                    aStar = new AStar(location, nearestPlayer.getLocation(), 50);
+
+                    if (aStar.getPathingResult().equals(PathingResult.SUCCESS)) {
+                        return aStar.getEndLocation().getBlock();
+                    }
+                } catch (AStar.InvalidPathException ex) { }
+            }
+        }
+
         // Determine the direction in which to spread the plugins.
         final int randX = PumpkinVirusUtil.RANDOM.nextInt(2);
         final int randY = PumpkinVirusUtil.RANDOM.nextInt(2);
@@ -126,5 +149,22 @@ public class PumpkinVirusSpreader implements Runnable {
         }
 
         return true;
+    }
+
+    private static Player getNearestPlayer(Location location) {
+        Entity nearestPlayer = null;
+        int distanceToNearestPlayer = Integer.MAX_VALUE;
+
+        for (Entity entity : location.getWorld().getLivingEntities()) {
+            if (entity.getType().equals(EntityType.PLAYER)) {
+                double distanceToEntity = location.distanceSquared(entity.getLocation());
+                if (distanceToEntity < configurationContext.playerTrackingRadius && distanceToEntity < distanceToNearestPlayer) {
+                    nearestPlayer = entity;
+                    distanceToEntity = distanceToNearestPlayer;
+                }
+            }
+        }
+
+        return (Player) nearestPlayer;
     }
 }

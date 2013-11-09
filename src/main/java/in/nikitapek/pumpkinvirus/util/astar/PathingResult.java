@@ -1,11 +1,16 @@
 package in.nikitapek.pumpkinvirus.util.astar;
 
-/**
- * Created with IntelliJ IDEA.
- * User: nikita
- * Date: 09/11/13
- * Time: 5:41 PM
- * To change this template use File | Settings | File Templates.
- */
-public class PathingResult {
+public enum PathingResult {
+    SUCCESS(0),
+    NO_PATH(-1);
+
+    private final int ec;
+
+    PathingResult(int ec) {
+        this.ec = ec;
+    }
+
+    public int getEndCode() {
+        return this.ec;
+    }
 }

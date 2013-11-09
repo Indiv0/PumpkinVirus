@@ -20,6 +20,7 @@ public final class PumpkinVirusConfigurationContext extends ConfigurationContext
     public final int virusDecayTime;
     public final int antiVirusDecayTime;
     public final boolean virusBurrowing;
+    public final double playerTrackingRadius;
 
     public final TypeSafeSet<String> worlds;
 
@@ -50,6 +51,8 @@ public final class PumpkinVirusConfigurationContext extends ConfigurationContext
         antiVirusDecayTime = plugin.getConfig().getInt("antiVirusDecayTime", 5000);
         // Retrieves whether or not pumpkins should be allowed to burrow through blocks.
         virusBurrowing = plugin.getConfig().getBoolean("virusBurrowing", true);
+        // Retrieves the radius within which to track players.
+        playerTrackingRadius = plugin.getConfig().getDouble("playerTrackingRadius", 50);
 
         // Attempts to read the configurationSection containing the worlds in which pumpkins are allowed to spread.
         @SuppressWarnings("unchecked")
