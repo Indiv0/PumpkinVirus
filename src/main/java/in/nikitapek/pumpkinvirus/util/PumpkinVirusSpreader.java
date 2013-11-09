@@ -52,7 +52,7 @@ class PumpkinVirusSpreader implements Runnable {
         }
 
         // Gets the material 3 blocks under the target block.
-        final Material baseBlockMaterial = Material.getMaterial(block.getWorld().getBlockTypeIdAt(newX, newY - MAXIMUM_HEIGHT_ABOVE_SUPPORT, newZ));
+        final Material baseBlockMaterial = block.getWorld().getBlockAt(newX, newY - MAXIMUM_HEIGHT_ABOVE_SUPPORT, newZ).getType();
 
         // If the material of the block acting as "support"
         // underneath the one being targetted is not considered to
