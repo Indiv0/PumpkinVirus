@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 
-public final class PumpkinVirusSpreader implements Runnable {
+class PumpkinVirusSpreader implements Runnable {
     private static final byte MAXIMUM_HEIGHT_ABOVE_SUPPORT = 3;
 
     private final PumpkinVirusConfigurationContext configurationContext;
