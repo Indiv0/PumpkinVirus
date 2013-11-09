@@ -2,6 +2,7 @@ package in.nikitapek.pumpkinvirus.util;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.scheduler.BukkitScheduler;
 
@@ -24,54 +25,10 @@ public class PumpkinVirusSpreader implements Runnable {
 
     @Override
     public void run() {
+        World world = block.getWorld();
+
         // Checks to make sure pumpkins are allowed to spread in the current world.
-        if (!configurationContext.worlds.contains(block.getWorld().getName())) {
-            return;
-        }
-
-        // Determine the direction in which to spread the plugins.
-        final int randX = PumpkinVirusUtil.RANDOM.nextInt(2);
-        final int randY = PumpkinVirusUtil.RANDOM.nextInt(2);
-        final int randZ = PumpkinVirusUtil.RANDOM.nextInt(2);
-
-        // Instantializes the new coordinates, which the pumpkin
-        // will spread to.
-        int newX;
-        int newY;
-        int newZ;
-
-        // Based on random directions, adds or subtracts the randomly generated values in order to move the location at which the next pumpkin will be spawned.
-        newX = block.getX() + (PumpkinVirusUtil.RANDOM.nextBoolean() ? randX : -randX);
-        newY = block.getY() + (PumpkinVirusUtil.RANDOM.nextBoolean() ? randY : -randY);
-        newZ = block.getZ() + (PumpkinVirusUtil.RANDOM.nextBoolean() ? randZ : -randZ);
-
-        // Gets the block to be converted, as well as its material.
-        final Block targetBlock = block.getWorld().getBlockAt(newX, newY, newZ);
-
-        if (targetBlock == null) {
-            return;
-        }
-
-        // If the block is not air, then attempt to create a pumpkin there once again.
-        if (!Material.AIR.equals(targetBlock.getType())) {
-            spreadBlock(block);
-            return;
-        }
-
-        // Gets the material 3 blocks under the target block.
-        final Material baseBlockMaterial = block.getWorld().getBlockAt(newX, newY - MAXIMUM_HEIGHT_ABOVE_SUPPORT, newZ).getType();
-
-        // If the material of the block acting as "support"
-        // underneath the one being targetted is not considered to
-        // be a valid support, then we must retry the creation of
-        // the pumpkin, so as not to allow the pumpkins to rise too
-        // far above the ground.
-        if (Material.AIR.equals(baseBlockMaterial)  ||
-                Material.WATER.equals(baseBlockMaterial)  ||
-                Material.LAVA.equals(baseBlockMaterial) ||
-                configurationContext.virusBlockType.equals(baseBlockMaterial) ||
-                configurationContext.antiVirusBlockType.equals(baseBlockMaterial)) {
-            spreadBlock(block);
+        if (!configurationContext.worlds.contains(world.getName())) {
             return;
         }
 
@@ -80,7 +37,41 @@ public class PumpkinVirusSpreader implements Runnable {
             return;
         }
 
-        // Converts the target block to a pumpkin.
+        // Get the block to which the virus will attempt to spread.
+        Block targetBlock = getToBlock(block);
+
+        if (targetBlock == null) {
+            return;
+        }
+
+        Material targetMaterial = targetBlock.getType();
+
+        if (initialMaterial.equals(configurationContext.antiVirusBlockType)) {
+            // If the target block is not a virus block, attempt to spread from this location again.
+            if (!targetMaterial.equals(configurationContext.virusBlockType)) {
+                spreadBlock(block);
+                return;
+            }
+        } else {
+            // If the block is not air, then attempt to spread the virus from the current location again.
+            if (!Material.AIR.equals(targetMaterial)) {
+                // If the block being spread to is an anti-virus block, then the anti-virus begins spreading.
+                if (configurationContext.antiVirusBlockType.equals(targetMaterial)) {
+                    spreadBlock(targetBlock);
+                }
+
+                spreadBlock(block);
+                return;
+            }
+        }
+
+        // If the target block does not have a valid supporting material, we must re-try the spread of the virus.
+        if (!isSupportMaterialUnderBlockValid(targetBlock)) {
+            spreadBlock(block);
+            return;
+        }
+
+        // Converts the target block to a virus block.
         targetBlock.setType(block.getType());
 
         // Spreads a new pumpkin from the target location.
@@ -89,12 +80,51 @@ public class PumpkinVirusSpreader implements Runnable {
 
     public static void spreadBlock(Block block) {
         BukkitScheduler scheduler = Bukkit.getScheduler();
+        Material material = block.getType();
 
         // Creates an sync task, which when run, spreads a pumpkin.
         scheduler.scheduleSyncDelayedTask(configurationContext.plugin, new PumpkinVirusSpreader(block), configurationContext.ticks);
 
-        if (block.getType().equals(configurationContext.antiVirusBlockType)) {
-            PumpkinVirusDecayer.decayBlock(block);
+        if (material.equals(configurationContext.antiVirusBlockType) && configurationContext.antiVirusDecayTime != 0) {
+            PumpkinVirusDecayer.decayBlock(block, configurationContext.antiVirusDecayTime);
+        } else if (material.equals(configurationContext.antiVirusBlockType) && configurationContext.virusDecayTime != 0) {
+            PumpkinVirusDecayer.decayBlock(block, configurationContext.virusDecayTime);
         }
+    }
+
+    private static Block getToBlock(Block fromBlock) {
+        // Determine the direction in which to spread the plugins.
+        final int randX = PumpkinVirusUtil.RANDOM.nextInt(2);
+        final int randY = PumpkinVirusUtil.RANDOM.nextInt(2);
+        final int randZ = PumpkinVirusUtil.RANDOM.nextInt(2);
+
+        // Instantializes the new coordinates, which the pumpkin will spread to.
+        int newX;
+        int newY;
+        int newZ;
+
+        // Based on random directions, adds or subtracts the randomly generated values in order to move the location at which the next pumpkin will be spawned.
+        newX = fromBlock.getX() + (PumpkinVirusUtil.RANDOM.nextBoolean() ? randX : -randX);
+        newY = fromBlock.getY() + (PumpkinVirusUtil.RANDOM.nextBoolean() ? randY : -randY);
+        newZ = fromBlock.getZ() + (PumpkinVirusUtil.RANDOM.nextBoolean() ? randZ : -randZ);
+
+        // Gets the block to be converted.
+        return fromBlock.getWorld().getBlockAt(newX, newY, newZ);
+    }
+
+    private static boolean isSupportMaterialUnderBlockValid(Block block) {
+        // Gets the material 3 blocks under the target block.
+        Material supportBlockMaterial = block.getRelative(0, -MAXIMUM_HEIGHT_ABOVE_SUPPORT, 0).getType();
+
+        // If the material of the block acting as "support" underneath the one being targetted is not considered to be a valid support, then we must retry the creation of the pumpkin, so as not to allow the pumpkins to rise too far above the ground.
+        if (Material.AIR.equals(supportBlockMaterial)  ||
+                Material.WATER.equals(supportBlockMaterial)  ||
+                Material.LAVA.equals(supportBlockMaterial) ||
+                configurationContext.virusBlockType.equals(supportBlockMaterial) ||
+                configurationContext.antiVirusBlockType.equals(supportBlockMaterial)) {
+            return false;
+        }
+
+        return true;
     }
 }

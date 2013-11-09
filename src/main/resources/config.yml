@@ -22,9 +22,17 @@ virusBlockType: pumpkin
 ## The block to be used as the anti-virus
 antiVirusBlockType: melon
 
+## Regulates the speed at which the virus will decay.
+# Notes:
+#   This is an interval, counted in ticks, before the decay is initiated.
+#   If set to zero, the blocks will not decay.
+virusDecayTime: 0
+
 ## Regulates the speed at which the anti-virus will decay.
-# (Note: this is an interval, counted in ticks, before the decay is initiated.)
-decayTime: 5000
+# Notes:
+#   This is an interval, counted in ticks, before the decay is initiated.
+#   If set to zero, the blocks will not decay.
+antiVirusDecayTime: 5000
 
 
 #======== Worlds ========#

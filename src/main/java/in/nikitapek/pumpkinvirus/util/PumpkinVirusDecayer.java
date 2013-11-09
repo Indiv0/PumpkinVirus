@@ -30,8 +30,8 @@ public class PumpkinVirusDecayer implements Runnable {
         block.setType(Material.AIR);
     }
 
-    public static void decayBlock(Block block) {
+    public static void decayBlock(Block block, int decayTime) {
         // Creates an sync task, which when run, decays a block.
-        Bukkit.getScheduler().scheduleSyncDelayedTask(configurationContext.plugin, new PumpkinVirusDecayer(block), configurationContext.decayTime);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(configurationContext.plugin, new PumpkinVirusDecayer(block), decayTime);
     }
 }
