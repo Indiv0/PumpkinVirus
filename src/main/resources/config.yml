@@ -58,6 +58,17 @@ worlds:
   - world_nether
 
 
+#======== Invalid Support Blocks List ========#
+
+## A list of all the blocks which cannot support a virus or anti-virus block.
+nonSupportingBlocks:
+  - AIR
+  - WATER
+  - LAVA
+  - PUMPKIN
+  - MELON
+
+
 #======== Burrowable Blocks List ========#
 
 ## A list of all the blocks through which viruses are allowed to burrowed through, if virusBurrowing is enabled.

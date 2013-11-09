@@ -6,6 +6,7 @@ import com.amshulman.typesafety.TypeSafeSet;
 import com.amshulman.typesafety.impl.TypeSafeSetImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.HashSet;
 import java.util.List;
@@ -23,7 +24,7 @@ public final class PumpkinVirusConfigurationContext extends ConfigurationContext
     public final double playerTrackingRadius;
 
     public final TypeSafeSet<String> worlds;
-
+    public final TypeSafeSet<Material> nonSupportingBlocks;
     public final TypeSafeSet<Material> burrowableBlocks;
 
     public PumpkinVirusConfigurationContext(final MbapiPlugin plugin) {
@@ -65,14 +66,15 @@ public final class PumpkinVirusConfigurationContext extends ConfigurationContext
             }
         }
 
-        burrowableBlocks = new TypeSafeSetImpl<>(new HashSet<Material>(), SupplementaryTypes.MATERIAL);
+        nonSupportingBlocks = getMaterialsFromConfigurationSection("nonSupportingBlocks");
+        burrowableBlocks = getMaterialsFromConfigurationSection("burrowableBlocks");
     }
 
     /**
      * Attempts to retrieve a material from the plugin configuration.
      * @param key the key for the material to be retrieved.
      */
-    Material retrieveMaterialFromConfig(String key, Material defaultMaterial) {
+    private Material retrieveMaterialFromConfig(String key, Material defaultMaterial) {
         String materialString = plugin.getConfig().getString(key);
 
         if (materialString == null) {
@@ -88,5 +90,26 @@ public final class PumpkinVirusConfigurationContext extends ConfigurationContext
         }
 
         return material;
+    }
+
+
+    private TypeSafeSetImpl<Material> getMaterialsFromConfigurationSection(String sectionName) {
+        TypeSafeSetImpl<Material> materials = new TypeSafeSetImpl<>(new HashSet<Material>(), SupplementaryTypes.MATERIAL);
+        ConfigurationSection configSection = plugin.getConfig().getConfigurationSection(sectionName);
+        if (configSection == null) {
+            plugin.getLogger().log(Level.SEVERE, "Failed to load " + sectionName + " list.");
+        } else {
+            for (String materialName : configSection.getKeys(false)) {
+                Material material = Material.getMaterial(materialName);
+
+                if (material != null) {
+                    materials.add(material);
+                } else {
+                    plugin.getLogger().log(Level.WARNING, materialName + "is not a valid key.");
+                }
+            }
+        }
+
+        return materials;
     }
 }

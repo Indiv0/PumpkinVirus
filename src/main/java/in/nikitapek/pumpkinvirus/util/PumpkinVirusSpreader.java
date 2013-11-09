@@ -136,19 +136,23 @@ public class PumpkinVirusSpreader implements Runnable {
     }
 
     private static boolean isSupportMaterialUnderBlockValid(Block block) {
-        // Gets the material 3 blocks under the target block.
-        Material supportBlockMaterial = block.getRelative(0, -configurationContext.maxHeightOffGround, 0).getType();
+        // Gets the materials under the target block to check for a valid support.
+        for (int i = 1; i <= configurationContext.maxHeightOffGround; i++) {
+            Material supportBlockMaterial = block.getRelative(0, -i, 0).getType();
 
-        // If the material of the block acting as "support" underneath the one being targetted is not considered to be a valid support, then we must retry the creation of the pumpkin, so as not to allow the pumpkins to rise too far above the ground.
-        if (Material.AIR.equals(supportBlockMaterial)  ||
-                Material.WATER.equals(supportBlockMaterial)  ||
-                Material.LAVA.equals(supportBlockMaterial) ||
-                configurationContext.virusBlockType.equals(supportBlockMaterial) ||
-                configurationContext.antiVirusBlockType.equals(supportBlockMaterial)) {
-            return false;
+            // If the material of the block acting as "support" underneath the one being targetted is not considered to be a valid support, then we must retry the creation of the pumpkin, so as not to allow the pumpkins to rise too far above the ground.
+            if (Material.AIR.equals(supportBlockMaterial) ||
+                    Material.WATER.equals(supportBlockMaterial) ||
+                    Material.LAVA.equals(supportBlockMaterial) ||
+                    configurationContext.virusBlockType.equals(supportBlockMaterial) ||
+                    configurationContext.antiVirusBlockType.equals(supportBlockMaterial)) {
+                continue;
+            }
+
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     private static Player getNearestPlayer(Location location) {
