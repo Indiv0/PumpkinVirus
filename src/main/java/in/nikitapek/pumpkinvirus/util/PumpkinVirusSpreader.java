@@ -7,8 +7,6 @@ import org.bukkit.block.Block;
 import org.bukkit.scheduler.BukkitScheduler;
 
 public class PumpkinVirusSpreader implements Runnable {
-    private static final byte MAXIMUM_HEIGHT_ABOVE_SUPPORT = 3;
-
     private static PumpkinVirusConfigurationContext configurationContext;
 
     private final Block block;
@@ -116,7 +114,7 @@ public class PumpkinVirusSpreader implements Runnable {
 
     private static boolean isSupportMaterialUnderBlockValid(Block block) {
         // Gets the material 3 blocks under the target block.
-        Material supportBlockMaterial = block.getRelative(0, -MAXIMUM_HEIGHT_ABOVE_SUPPORT, 0).getType();
+        Material supportBlockMaterial = block.getRelative(0, -configurationContext.maxHeightOffGround, 0).getType();
 
         // If the material of the block acting as "support" underneath the one being targetted is not considered to be a valid support, then we must retry the creation of the pumpkin, so as not to allow the pumpkins to rise too far above the ground.
         if (Material.AIR.equals(supportBlockMaterial)  ||
