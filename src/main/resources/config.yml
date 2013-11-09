@@ -16,8 +16,13 @@ trackingPlayers: false
 # (Note: liquids, air, and the virus itself does not count as ground in this scenario.)
 maxHeightOffGround: 3
 
-## Determines whether or not the virus is allowed to spread/duplicate.
-spreadEnabled: false
-
 ## The block to be used as the virus
 virusBlockID: pumpkin
+
+
+#======== Worlds ========#
+
+## List of worlds in which pumpkins are allowed to spread.
+worlds:
+  - world
+  - world_nether

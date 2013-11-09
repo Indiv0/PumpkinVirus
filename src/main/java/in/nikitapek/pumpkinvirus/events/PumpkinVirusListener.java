@@ -2,8 +2,8 @@ package in.nikitapek.pumpkinvirus.events;
 
 import in.nikitapek.pumpkinvirus.util.PumpkinVirusConfigurationContext;
 import in.nikitapek.pumpkinvirus.util.PumpkinVirusSpreader;
-
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -17,14 +17,16 @@ public final class PumpkinVirusListener implements Listener {
 
     @EventHandler
     public void onBlockPlace(final BlockPlaceEvent event) {
-        if (!configurationContext.isPumpkinSpreadEnabled) {
+        Block block = event.getBlock();
+
+        if (!configurationContext.worlds.contains(block.getWorld().getName())) {
             return;
         }
 
-        if (event.getBlock().getType() != Material.PUMPKIN) {
+        if (block.getType() != Material.PUMPKIN) {
             return;
         }
 
-        PumpkinVirusSpreader.spreadPumpkins(configurationContext, event.getBlock());
+        PumpkinVirusSpreader.spreadPumpkins(configurationContext, block);
     }
 }

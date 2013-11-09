@@ -17,8 +17,8 @@ public final class PumpkinVirusSpreader implements Runnable {
 
     @Override
     public void run() {
-        // Checks to make sure pumpkins are allowed to spread.
-        if (!configurationContext.isPumpkinSpreadEnabled) {
+        // Checks to make sure pumpkins are allowed to spread in the current world.
+        if (!configurationContext.worlds.contains(block.getWorld().getName())) {
             return;
         }
 

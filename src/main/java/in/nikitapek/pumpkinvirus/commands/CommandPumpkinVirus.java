@@ -1,29 +1,46 @@
 package in.nikitapek.pumpkinvirus.commands;
 
-import in.nikitapek.pumpkinvirus.util.Commands;
-import in.nikitapek.pumpkinvirus.util.PumpkinVirusConfigurationContext;
-
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import com.amshulman.mbapi.commands.PlayerOnlyCommand;
 import com.amshulman.typesafety.TypeSafeCollections;
 import com.amshulman.typesafety.TypeSafeList;
+import in.nikitapek.pumpkinvirus.util.Commands;
+import in.nikitapek.pumpkinvirus.util.PumpkinVirusConfigurationContext;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public final class CommandPumpkinVirus extends PlayerOnlyCommand {
     private final PumpkinVirusConfigurationContext configurationContext;
 
     public CommandPumpkinVirus(final PumpkinVirusConfigurationContext configurationContext) {
-        super(configurationContext, Commands.PUMPKINVIRUS, 0, 0);
+        super(configurationContext, Commands.PUMPKINVIRUS, 0, 1);
 
         this.configurationContext = configurationContext;
     }
 
     @Override
     protected boolean executeForPlayer(final Player player, final TypeSafeList<String> args) {
-        configurationContext.isPumpkinSpreadEnabled = !configurationContext.isPumpkinSpreadEnabled;
+        String worldName;
 
-        if (configurationContext.isPumpkinSpreadEnabled) {
+        // If the player provided a world argument, use it as the world to be modified.
+        switch (args.size()) {
+            case 1:
+                worldName = args.get(0);
+                break;
+            default:
+                worldName = player.getWorld().getName();
+        }
+
+        boolean isWorldEnabled = configurationContext.worlds.contains(worldName);
+
+        if (isWorldEnabled) {
+            configurationContext.worlds.remove(worldName);
+        } else {
+            configurationContext.worlds.add(worldName);
+        }
+
+        isWorldEnabled = !isWorldEnabled;
+
+        if (isWorldEnabled) {
             player.sendMessage("Pumpkins are now spreading!");
         } else {
             player.sendMessage("Pumpkins are no longer spreading!");
