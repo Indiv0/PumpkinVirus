@@ -7,12 +7,16 @@ import org.bukkit.block.Block;
 public class PumpkinVirusSpreader implements Runnable {
     private static final byte MAXIMUM_HEIGHT_ABOVE_SUPPORT = 3;
 
-    private final PumpkinVirusConfigurationContext configurationContext;
+    private static PumpkinVirusConfigurationContext configurationContext;
+
     private final Block block;
 
-    public PumpkinVirusSpreader(final PumpkinVirusConfigurationContext configurationContext, final Block block) {
-        this.configurationContext = configurationContext;
+    public PumpkinVirusSpreader(final Block block) {
         this.block = block;
+    }
+
+    public static void initialize(PumpkinVirusConfigurationContext configurationContext) {
+        PumpkinVirusSpreader.configurationContext = configurationContext;
     }
 
     @Override
@@ -47,7 +51,7 @@ public class PumpkinVirusSpreader implements Runnable {
 
         // If the block is not air, then attempt to create a pumpkin there once again.
         if (!Material.AIR.equals(targetBlock.getType())) {
-            spreadPumpkins(configurationContext, block);
+            spreadPumpkins(block);
             return;
         }
 
@@ -60,22 +64,23 @@ public class PumpkinVirusSpreader implements Runnable {
         // the pumpkin, so as not to allow the pumpkins to rise too
         // far above the ground.
         if (Material.AIR.equals(baseBlockMaterial)  ||
-                Material.PUMPKIN.equals(baseBlockMaterial)  ||
                 Material.WATER.equals(baseBlockMaterial)  ||
-                Material.LAVA.equals(baseBlockMaterial)) {
-            spreadPumpkins(configurationContext, block);
+                Material.LAVA.equals(baseBlockMaterial) ||
+                configurationContext.virusBlockType.equals(baseBlockMaterial) ||
+                configurationContext.antiVirusBlockType.equals(baseBlockMaterial)) {
+            spreadPumpkins(block);
             return;
         }
 
         // Converts the target block to a pumpkin.
-        targetBlock.setType(Material.PUMPKIN);
+        targetBlock.setType(block.getType());
 
         // Spreads a new pumpkin from the target location.
-        spreadPumpkins(configurationContext, targetBlock);
+        spreadPumpkins(targetBlock);
     }
 
-    public static void spreadPumpkins(final PumpkinVirusConfigurationContext configurationContext, final Block block) {
+    public static void spreadPumpkins(final Block block) {
         // Creates an sync task, which when run, spreads a pumpkin.
-        Bukkit.getScheduler().scheduleSyncDelayedTask(configurationContext.plugin, new PumpkinVirusSpreader(configurationContext, block), configurationContext.ticks);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(configurationContext.plugin, new PumpkinVirusSpreader(block), configurationContext.ticks);
     }
 }

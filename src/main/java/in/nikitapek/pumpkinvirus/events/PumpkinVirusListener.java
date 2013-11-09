@@ -26,6 +26,6 @@ public final class PumpkinVirusListener implements Listener {
             return;
         }
 
-        PumpkinVirusSpreader.spreadPumpkins(configurationContext, block);
+        PumpkinVirusSpreader.spreadPumpkins(block);
     }
 }
