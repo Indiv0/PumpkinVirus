@@ -19,8 +19,11 @@ public final class PumpkinVirusConfigurationContext extends ConfigurationContext
     public final Material antiVirusBlockType;
     public final int virusDecayTime;
     public final int antiVirusDecayTime;
+    public final boolean virusBurrowing;
 
     public final TypeSafeSet<String> worlds;
+
+    public final TypeSafeSet<Material> burrowableBlocks;
 
     public PumpkinVirusConfigurationContext(final MbapiPlugin plugin) {
         super(plugin);
@@ -45,6 +48,8 @@ public final class PumpkinVirusConfigurationContext extends ConfigurationContext
         virusDecayTime = plugin.getConfig().getInt("virusDecayTime", 0);
         // Retrieves the ticks before anti-virus decay begins.
         antiVirusDecayTime = plugin.getConfig().getInt("antiVirusDecayTime", 5000);
+        // Retrieves whether or not pumpkins should be allowed to burrow through blocks.
+        virusBurrowing = plugin.getConfig().getBoolean("virusBurrowing", true);
 
         // Attempts to read the configurationSection containing the worlds in which pumpkins are allowed to spread.
         @SuppressWarnings("unchecked")
@@ -56,6 +61,8 @@ public final class PumpkinVirusConfigurationContext extends ConfigurationContext
                 worlds.add(world);
             }
         }
+
+        burrowableBlocks = new TypeSafeSetImpl<>(new HashSet<Material>(), SupplementaryTypes.MATERIAL);
     }
 
     /**

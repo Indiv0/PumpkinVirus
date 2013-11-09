@@ -54,14 +54,16 @@ public class PumpkinVirusSpreader implements Runnable {
             }
         } else {
             // If the block is not air, then attempt to spread the virus from the current location again.
-            if (!Material.AIR.equals(targetMaterial)) {
-                // If the block being spread to is an anti-virus block, then the anti-virus begins spreading.
-                if (configurationContext.antiVirusBlockType.equals(targetMaterial)) {
-                    spreadBlock(targetBlock);
-                }
+            if (!Material.AIR.equals(targetMaterial) ) {
+                if (!configurationContext.virusBurrowing || !configurationContext.burrowableBlocks.contains(targetMaterial)) {
+                    // If the block being spread to is an anti-virus block, then the anti-virus begins spreading.
+                    if (configurationContext.antiVirusBlockType.equals(targetMaterial)) {
+                        spreadBlock(targetBlock);
+                    }
 
-                spreadBlock(block);
-                return;
+                    spreadBlock(block);
+                    return;
+                }
             }
         }
 
