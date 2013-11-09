@@ -22,6 +22,10 @@ public final class PumpkinVirusListener implements Listener {
             return;
         }
 
+        if (!event.getPlayer().hasPermission("pumpkinvirus.spreadvirus")) {
+            return;
+        }
+
         if (!block.getType().equals(configurationContext.virusBlockType) || !block.getType().equals(configurationContext.antiVirusBlockType)) {
             return;
         }

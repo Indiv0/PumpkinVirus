@@ -17,3 +17,5 @@ permissions:
   pumpkinvirus.pumpkinvirus.toggle:
     children:
       pumpkinvirus.pumpkinvirus: true
+  pumpkinvirus.spreadvirus:
+    description: Allows the player to spread pumpkins.
