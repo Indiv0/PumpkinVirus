@@ -17,6 +17,7 @@ public final class PumpkinVirusConfigurationContext extends ConfigurationContext
     public final int maxHeightOffGround;
     public final Material virusBlockType;
     public final Material antiVirusBlockType;
+    public final int decayTime;
 
     public final TypeSafeSet<String> worlds;
 
@@ -38,6 +39,9 @@ public final class PumpkinVirusConfigurationContext extends ConfigurationContext
         virusBlockType = retrieveMaterialFromConfig("virusBlockType", Material.PUMPKIN);
         // Retrieves the block type to use for the anti-virus.
         antiVirusBlockType = retrieveMaterialFromConfig("antiVirusBlockType", Material.MELON);
+
+        // Retrieves the ticks before anti-virus decay begins.
+        decayTime = plugin.getConfig().getInt("decayTime", 5000);
 
         // Attempts to read the configurationSection containing the worlds in which pumpkins are allowed to spread.
         @SuppressWarnings("unchecked")

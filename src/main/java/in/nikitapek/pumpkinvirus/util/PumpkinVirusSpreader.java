@@ -3,6 +3,7 @@ package in.nikitapek.pumpkinvirus.util;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.scheduler.BukkitScheduler;
 
 public class PumpkinVirusSpreader implements Runnable {
     private static final byte MAXIMUM_HEIGHT_ABOVE_SUPPORT = 3;
@@ -10,9 +11,11 @@ public class PumpkinVirusSpreader implements Runnable {
     private static PumpkinVirusConfigurationContext configurationContext;
 
     private final Block block;
+    private final Material initialMaterial;
 
     public PumpkinVirusSpreader(final Block block) {
         this.block = block;
+        this.initialMaterial = block.getType();
     }
 
     public static void initialize(PumpkinVirusConfigurationContext configurationContext) {
@@ -51,7 +54,7 @@ public class PumpkinVirusSpreader implements Runnable {
 
         // If the block is not air, then attempt to create a pumpkin there once again.
         if (!Material.AIR.equals(targetBlock.getType())) {
-            spreadPumpkins(block);
+            spreadBlock(block);
             return;
         }
 
@@ -68,7 +71,12 @@ public class PumpkinVirusSpreader implements Runnable {
                 Material.LAVA.equals(baseBlockMaterial) ||
                 configurationContext.virusBlockType.equals(baseBlockMaterial) ||
                 configurationContext.antiVirusBlockType.equals(baseBlockMaterial)) {
-            spreadPumpkins(block);
+            spreadBlock(block);
+            return;
+        }
+
+        // If this block has been changed since the spread began (e.g. a pumpkin being removed by the anti-virus), then the spread fails.
+        if (!initialMaterial.equals(block.getType())) {
             return;
         }
 
@@ -76,11 +84,17 @@ public class PumpkinVirusSpreader implements Runnable {
         targetBlock.setType(block.getType());
 
         // Spreads a new pumpkin from the target location.
-        spreadPumpkins(targetBlock);
+        spreadBlock(targetBlock);
     }
 
-    public static void spreadPumpkins(final Block block) {
+    public static void spreadBlock(Block block) {
+        BukkitScheduler scheduler = Bukkit.getScheduler();
+
         // Creates an sync task, which when run, spreads a pumpkin.
-        Bukkit.getScheduler().scheduleSyncDelayedTask(configurationContext.plugin, new PumpkinVirusSpreader(block), configurationContext.ticks);
+        scheduler.scheduleSyncDelayedTask(configurationContext.plugin, new PumpkinVirusSpreader(block), configurationContext.ticks);
+
+        if (block.getType().equals(configurationContext.antiVirusBlockType)) {
+            PumpkinVirusDecayer.decayBlock(block);
+        }
     }
 }

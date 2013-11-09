@@ -4,6 +4,7 @@ import com.amshulman.mbapi.MbapiPlugin;
 import in.nikitapek.pumpkinvirus.commands.CommandPumpkinVirus;
 import in.nikitapek.pumpkinvirus.events.PumpkinVirusListener;
 import in.nikitapek.pumpkinvirus.util.PumpkinVirusConfigurationContext;
+import in.nikitapek.pumpkinvirus.util.PumpkinVirusDecayer;
 import in.nikitapek.pumpkinvirus.util.PumpkinVirusSpreader;
 import org.bukkit.Bukkit;
 
@@ -16,6 +17,7 @@ public final class PumpkinVirusPlugin extends MbapiPlugin {
         registerCommandExecutor(new CommandPumpkinVirus(configurationContext));
 
         PumpkinVirusSpreader.initialize(configurationContext);
+        PumpkinVirusDecayer.initialize(configurationContext);
 
         super.onEnable();
     }
