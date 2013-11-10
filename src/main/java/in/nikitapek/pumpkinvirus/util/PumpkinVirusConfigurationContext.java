@@ -6,7 +6,6 @@ import com.amshulman.typesafety.TypeSafeSet;
 import com.amshulman.typesafety.impl.TypeSafeSetImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.HashSet;
 import java.util.List;
@@ -21,7 +20,7 @@ public final class PumpkinVirusConfigurationContext extends ConfigurationContext
     public final int virusDecayTime;
     public final int antiVirusDecayTime;
     public final boolean virusBurrowing;
-    public final double playerTrackingRadius;
+    public final double playerTrackingRadiusSquared;
 
     public final TypeSafeSet<String> worlds;
     public final TypeSafeSet<Material> nonSupportingBlocks;
@@ -53,7 +52,7 @@ public final class PumpkinVirusConfigurationContext extends ConfigurationContext
         // Retrieves whether or not pumpkins should be allowed to burrow through blocks.
         virusBurrowing = plugin.getConfig().getBoolean("virusBurrowing", true);
         // Retrieves the radius within which to track players.
-        playerTrackingRadius = plugin.getConfig().getDouble("playerTrackingRadius", 50);
+        playerTrackingRadiusSquared = Math.pow(plugin.getConfig().getDouble("playerTrackingRadius", 50), 2);
 
         // Attempts to read the configurationSection containing the worlds in which pumpkins are allowed to spread.
         @SuppressWarnings("unchecked")
@@ -61,7 +60,7 @@ public final class PumpkinVirusConfigurationContext extends ConfigurationContext
         if (worldList == null) {
             plugin.getLogger().log(Level.SEVERE, "Failed to load pumpkin-enabled worlds list.");
         } else {
-            for (final String world : worldList) {
+            for (String world : worldList) {
                 worlds.add(world);
             }
         }
@@ -95,18 +94,12 @@ public final class PumpkinVirusConfigurationContext extends ConfigurationContext
 
     private TypeSafeSetImpl<Material> getMaterialsFromConfigurationSection(String sectionName) {
         TypeSafeSetImpl<Material> materials = new TypeSafeSetImpl<>(new HashSet<Material>(), SupplementaryTypes.MATERIAL);
-        ConfigurationSection configSection = plugin.getConfig().getConfigurationSection(sectionName);
-        if (configSection == null) {
+        List<String> materialsList = (List<String>) plugin.getConfig().getList(sectionName);
+        if (materialsList == null) {
             plugin.getLogger().log(Level.SEVERE, "Failed to load " + sectionName + " list.");
         } else {
-            for (String materialName : configSection.getKeys(false)) {
-                Material material = Material.getMaterial(materialName);
-
-                if (material != null) {
-                    materials.add(material);
-                } else {
-                    plugin.getLogger().log(Level.WARNING, materialName + "is not a valid key.");
-                }
+            for (String materialName : materialsList) {
+                materials.add(Material.getMaterial(materialName));
             }
         }
 

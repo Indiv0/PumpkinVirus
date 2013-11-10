@@ -26,7 +26,7 @@ public final class PumpkinVirusListener implements Listener {
             return;
         }
 
-        if (!block.getType().equals(configurationContext.virusBlockType) || !block.getType().equals(configurationContext.antiVirusBlockType)) {
+        if (!block.getType().equals(configurationContext.virusBlockType) && !block.getType().equals(configurationContext.antiVirusBlockType)) {
             return;
         }
 

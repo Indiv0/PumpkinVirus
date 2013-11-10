@@ -2,6 +2,7 @@ package in.nikitapek.pumpkinvirus.util;
 
 import in.nikitapek.pumpkinvirus.util.astar.AStar;
 import in.nikitapek.pumpkinvirus.util.astar.PathingResult;
+import in.nikitapek.pumpkinvirus.util.astar.Tile;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -11,6 +12,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
+
+import java.util.List;
 
 public class PumpkinVirusSpreader implements Runnable {
     private static PumpkinVirusConfigurationContext configurationContext;
@@ -101,18 +104,30 @@ public class PumpkinVirusSpreader implements Runnable {
     private static Block getToBlock(Block fromBlock) {
         Location location = fromBlock.getLocation();
 
-        if (configurationContext.trackingPlayers) {
+        if (configurationContext.virusBlockType.equals(fromBlock.getType())) {
             Player nearestPlayer = getNearestPlayer(location);
 
             if (nearestPlayer != null) {
-                AStar aStar = null;
                 try {
-                    aStar = new AStar(location, nearestPlayer.getLocation(), 50);
+                    AStar aStar = new AStar(location, nearestPlayer.getEyeLocation(), 50);
+                    List<Tile> tiles = aStar.iterate();
 
                     if (aStar.getPathingResult().equals(PathingResult.SUCCESS)) {
-                        return aStar.getEndLocation().getBlock();
+                        return tiles.get(1).getLocation(location).getBlock();
                     }
                 } catch (AStar.InvalidPathException ex) { }
+            }
+        } else {
+            // Scan surrounding blocks for virus blocks to remove.
+            for (int x = -1; x <= 1; x++) {
+                for (int y = -1; y <= 1; y++) {
+                    for (int z = -1; z <= 1; z++) {
+                        Block toBlock = fromBlock.getRelative(x, y, z);
+                        if (configurationContext.virusBlockType.equals(toBlock.getType())) {
+                            return toBlock;
+                        }
+                    }
+                }
             }
         }
 
@@ -135,7 +150,7 @@ public class PumpkinVirusSpreader implements Runnable {
         return fromBlock.getWorld().getBlockAt(newX, newY, newZ);
     }
 
-    private static boolean isSupportMaterialUnderBlockValid(Block block) {
+    public static boolean isSupportMaterialUnderBlockValid(Block block) {
         // Gets the materials under the target block to check for a valid support.
         for (int i = 1; i <= configurationContext.maxHeightOffGround; i++) {
             Material supportBlockMaterial = block.getRelative(0, -i, 0).getType();
@@ -144,6 +159,8 @@ public class PumpkinVirusSpreader implements Runnable {
             if (Material.AIR.equals(supportBlockMaterial) ||
                     Material.WATER.equals(supportBlockMaterial) ||
                     Material.LAVA.equals(supportBlockMaterial) ||
+                    Material.STATIONARY_LAVA.equals(supportBlockMaterial) ||
+                    Material.STATIONARY_WATER.equals(supportBlockMaterial) ||
                     configurationContext.virusBlockType.equals(supportBlockMaterial) ||
                     configurationContext.antiVirusBlockType.equals(supportBlockMaterial)) {
                 continue;
@@ -162,7 +179,7 @@ public class PumpkinVirusSpreader implements Runnable {
         for (Entity entity : location.getWorld().getLivingEntities()) {
             if (entity.getType().equals(EntityType.PLAYER)) {
                 double distanceToEntity = location.distanceSquared(entity.getLocation());
-                if (distanceToEntity < configurationContext.playerTrackingRadius && distanceToEntity < distanceToNearestPlayer) {
+                if (distanceToEntity < configurationContext.playerTrackingRadiusSquared && distanceToEntity < distanceToNearestPlayer) {
                     nearestPlayer = entity;
                     distanceToEntity = distanceToNearestPlayer;
                 }

@@ -11,8 +11,8 @@
 spreadSpeed: 5
 
 ## Determines whether or not the virus will attempt to hunt down and kill players by suffocation.
-# Default: false
-trackingPlayers: false
+# Default: true
+trackingPlayers: true
 
 ## Sets the maximum height that virus blocks can be above ground.
 # (Note: liquids, air, and the virus itself does not count as ground in this scenario.)
@@ -20,12 +20,12 @@ trackingPlayers: false
 maxHeightOffGround: 3
 
 ## The block to be used as the virus
-# Default: pumpkin
-virusBlockType: pumpkin
+# Default: PUMPKIN
+virusBlockType: PUMPKIN
 
 ## The block to be used as the anti-virus
-# Default: melon
-antiVirusBlockType: melon
+# Default: MELON_BLOCK
+antiVirusBlockType: MELON_BLOCK
 
 ## Regulates the speed at which the virus will decay.
 # Notes:
@@ -66,7 +66,7 @@ nonSupportingBlocks:
   - WATER
   - LAVA
   - PUMPKIN
-  - MELON
+  - MELON_BLOCK
 
 
 #======== Burrowable Blocks List ========#

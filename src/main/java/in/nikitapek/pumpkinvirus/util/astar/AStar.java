@@ -4,14 +4,17 @@ package in.nikitapek.pumpkinvirus.util.astar;
  * By @Adamki11s
  */
 
+import in.nikitapek.pumpkinvirus.util.PumpkinVirusConfigurationContext;
+import in.nikitapek.pumpkinvirus.util.PumpkinVirusSpreader;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.material.Gate;
 
 import java.util.*;
 
 public class AStar {
+    private static PumpkinVirusConfigurationContext configurationContext;
 
     private final int sx, sy, sz, ex, ey, ez;
     private final World w;
@@ -41,9 +44,9 @@ public class AStar {
     private final String endUID;
 
     public AStar(Location start, Location end, int range) throws InvalidPathException {
-        boolean s = true, e = true;
+        boolean s = true, e = canBlockBeWalkedThrough(end.getBlock());
 
-        if (!(s = this.isLocationWalkable(start)) || !(e = this.isLocationWalkable(end))) {
+        if (!s || !e) {
             throw new InvalidPathException(s, e);
         }
 
@@ -66,6 +69,10 @@ public class AStar {
         StringBuilder b = new StringBuilder();
         b.append(ex - sx).append(ey - sy).append(ez - sz);
         this.endUID = b.toString();
+    }
+
+    public static void initialize(PumpkinVirusConfigurationContext configurationContext) {
+        AStar.configurationContext = configurationContext;
     }
 
     public Location getEndLocation() {
@@ -244,41 +251,23 @@ public class AStar {
 
     private boolean isTileWalkable(Tile t) {
         Location l = new Location(w, (sx + t.getX()), (sy + t.getY()), (sz + t.getZ()));
-        Block b = l.getBlock();
-        int i = b.getTypeId();
+        return canBlockBeWalkedThrough(l.getBlock());
+    }
 
-        // lava, fire, wheat and ladders cannot be walked on, and of course air
-        // 85, 107 and 113 stops npcs climbing fences and fence gates
-        if (i != 10 && i != 11 && i != 51 && i != 59 && i != 65 && i != 0 && i != 85 && i != 107 && i != 113 && !canBlockBeWalkedThrough(i)) {
-            // make sure the blocks above are air
+    private boolean canBlockBeWalkedThrough(Block block) {
+        Material material = block.getType();
 
-            if (b.getRelative(0, 1, 0).getTypeId() == 107) {
-                // fench gate check, if closed continue
-                Gate g = new Gate(b.getRelative(0, 1, 0).getData());
-                return (g.isOpen() ? (b.getRelative(0, 2, 0).getTypeId() == 0) : false);
+        if (!Material.AIR.equals(material)) {
+            if (!configurationContext.virusBurrowing) {
+                return false;
             }
-            return (canBlockBeWalkedThrough(b.getRelative(0, 1, 0).getTypeId()) && b.getRelative(0, 2, 0).getTypeId() == 0);
 
-        } else {
-            return false;
+            if (!configurationContext.burrowableBlocks.contains(material)) {
+                return false;
+            }
         }
-    }
 
-    private boolean isLocationWalkable(Location l) {
-        Block b = l.getBlock();
-        int i = b.getTypeId();
-
-        if (i != 10 && i != 11 && i != 51 && i != 59 && i != 65 && i != 0 && !canBlockBeWalkedThrough(i)) {
-            // make sure the blocks above are air or can be walked through
-            return (canBlockBeWalkedThrough(b.getRelative(0, 1, 0).getTypeId()) && b.getRelative(0, 2, 0).getTypeId() == 0);
-        } else {
-            return false;
-        }
-    }
-
-    private boolean canBlockBeWalkedThrough(int id) {
-        return (id == 0 || id == 6 || id == 50 || id == 63 || id == 30 || id == 31 || id == 32 || id == 37 || id == 38 || id == 39 || id == 40 || id == 55 || id == 66 || id == 75
-                || id == 76 || id == 78);
+        return PumpkinVirusSpreader.isSupportMaterialUnderBlockValid(block);
     }
 
     @SuppressWarnings("serial")
@@ -293,7 +282,7 @@ public class AStar {
         public String getErrorReason() {
             StringBuilder sb = new StringBuilder();
             if (!s) {
-                sb.append("Start Location was air. ");
+                sb.append("Start Location was air.");
             }
             if (!e) {
                 sb.append("End Location was air.");

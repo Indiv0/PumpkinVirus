@@ -6,6 +6,7 @@ import in.nikitapek.pumpkinvirus.events.PumpkinVirusListener;
 import in.nikitapek.pumpkinvirus.util.PumpkinVirusConfigurationContext;
 import in.nikitapek.pumpkinvirus.util.PumpkinVirusDecayer;
 import in.nikitapek.pumpkinvirus.util.PumpkinVirusSpreader;
+import in.nikitapek.pumpkinvirus.util.astar.AStar;
 import org.bukkit.Bukkit;
 
 public final class PumpkinVirusPlugin extends MbapiPlugin {
@@ -18,6 +19,7 @@ public final class PumpkinVirusPlugin extends MbapiPlugin {
 
         PumpkinVirusSpreader.initialize(configurationContext);
         PumpkinVirusDecayer.initialize(configurationContext);
+        AStar.initialize(configurationContext);
 
         super.onEnable();
     }
