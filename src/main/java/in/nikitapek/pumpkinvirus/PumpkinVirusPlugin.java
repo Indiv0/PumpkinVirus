@@ -1,12 +1,13 @@
 package in.nikitapek.pumpkinvirus;
 
+import com.amshulman.mbapi.MbapiPlugin;
 import in.nikitapek.pumpkinvirus.commands.CommandPumpkinVirus;
 import in.nikitapek.pumpkinvirus.events.PumpkinVirusListener;
 import in.nikitapek.pumpkinvirus.util.PumpkinVirusConfigurationContext;
-
+import in.nikitapek.pumpkinvirus.util.PumpkinVirusDecayer;
+import in.nikitapek.pumpkinvirus.util.PumpkinVirusSpreader;
+import in.nikitapek.pumpkinvirus.util.astar.AStar;
 import org.bukkit.Bukkit;
-
-import com.amshulman.mbapi.MbapiPlugin;
 
 public final class PumpkinVirusPlugin extends MbapiPlugin {
     @Override
@@ -15,6 +16,10 @@ public final class PumpkinVirusPlugin extends MbapiPlugin {
 
         registerEventHandler(new PumpkinVirusListener(configurationContext));
         registerCommandExecutor(new CommandPumpkinVirus(configurationContext));
+
+        PumpkinVirusSpreader.initialize(configurationContext);
+        PumpkinVirusDecayer.initialize(configurationContext);
+        AStar.initialize(configurationContext);
 
         super.onEnable();
     }

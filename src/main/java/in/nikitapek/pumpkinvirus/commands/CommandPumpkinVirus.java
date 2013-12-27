@@ -1,39 +1,29 @@
 package in.nikitapek.pumpkinvirus.commands;
 
+import com.amshulman.mbapi.commands.DelegatingCommand;
+import com.amshulman.mbapi.util.PermissionsEnum;
+import in.nikitapek.pumpkinvirus.commands.pumpkinvirus.CommandToggle;
 import in.nikitapek.pumpkinvirus.util.Commands;
 import in.nikitapek.pumpkinvirus.util.PumpkinVirusConfigurationContext;
 
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
-import com.amshulman.mbapi.commands.PlayerOnlyCommand;
-import com.amshulman.typesafety.TypeSafeCollections;
-import com.amshulman.typesafety.TypeSafeList;
-
-public final class CommandPumpkinVirus extends PlayerOnlyCommand {
-    private final PumpkinVirusConfigurationContext configurationContext;
-
+public final class CommandPumpkinVirus extends DelegatingCommand {
     public CommandPumpkinVirus(final PumpkinVirusConfigurationContext configurationContext) {
-        super(configurationContext, Commands.PUMPKINVIRUS, 0, 0);
-
-        this.configurationContext = configurationContext;
+        super(configurationContext, Commands.PUMPKINVIRUS, 1, 2);
+        registerSubcommand(new CommandToggle(configurationContext));
     }
 
-    @Override
-    protected boolean executeForPlayer(final Player player, final TypeSafeList<String> args) {
-        configurationContext.isPumpkinSpreadEnabled = !configurationContext.isPumpkinSpreadEnabled;
+    public enum PumpkinVirusCommands implements PermissionsEnum {
+        TOGGLE;
 
-        if (configurationContext.isPumpkinSpreadEnabled) {
-            player.sendMessage("Pumpkins are now spreading!");
-        } else {
-            player.sendMessage("Pumpkins are no longer spreading!");
+        private static final String PREFIX;
+
+        static {
+            PREFIX = Commands.PUMPKINVIRUS.getPrefix() + Commands.PUMPKINVIRUS.name() + ".";
         }
 
-        return true;
-    }
-
-    @Override
-    public TypeSafeList<String> onTabComplete(final CommandSender sender, final TypeSafeList<String> args) {
-        return TypeSafeCollections.emptyList();
+        @Override
+        public String getPrefix() {
+            return PREFIX;
+        }
     }
 }

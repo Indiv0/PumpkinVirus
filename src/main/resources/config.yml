@@ -7,17 +7,183 @@
 
 ## Regulates the speed at which the virus will spread/duplicate.
 # (Note: this is an interval, counted in ticks, between duplications.)
+# Default: 5
 spreadSpeed: 5
 
 ## Determines whether or not the virus will attempt to hunt down and kill players by suffocation.
-trackingPlayers: false
+# Default: true
+trackingPlayers: true
 
 ## Sets the maximum height that virus blocks can be above ground.
 # (Note: liquids, air, and the virus itself does not count as ground in this scenario.)
+# Default: 3
 maxHeightOffGround: 3
 
-## Determines whether or not the virus is allowed to spread/duplicate.
-spreadEnabled: false
-
 ## The block to be used as the virus
-virusBlockID: pumpkin
+# Default: PUMPKIN
+virusBlockType: PUMPKIN
+
+## The block to be used as the anti-virus
+# Default: MELON_BLOCK
+antiVirusBlockType: MELON_BLOCK
+
+## Regulates the speed at which the virus will decay.
+# Notes:
+#   This is an interval, counted in ticks, before the decay is initiated.
+#   If set to zero, the blocks will not decay.
+# Default: 0
+virusDecayTime: 0
+
+## Regulates the speed at which the anti-virus will decay.
+# Notes:
+#   This is an interval, counted in ticks, before the decay is initiated.
+#   If set to zero, the blocks will not decay.
+# Default: 5000
+antiVirusDecayTime: 5000
+
+## Configures whether or not the virus is allowed to burrow through blocks.
+# Default: true
+virusBurrowing: true
+
+## The radius within which to track players if trackingPlayers is enabled.
+# Default: 50
+playerTrackingRadius: 50
+
+
+#======== Worlds ========#
+
+## List of worlds in which pumpkins are allowed to spread.
+worlds:
+  - world
+  - world_nether
+
+
+#======== Invalid Support Blocks List ========#
+
+## A list of all the blocks which cannot support a virus or anti-virus block.
+nonSupportingBlocks:
+  - AIR
+  - WATER
+  - LAVA
+  - PUMPKIN
+  - MELON_BLOCK
+
+
+#======== Burrowable Blocks List ========#
+
+## A list of all the blocks through which viruses are allowed to burrowed through, if virusBurrowing is enabled.
+burrowableBlocks:
+  - STONE
+  - GRASS
+  - DIRT
+  - COBBLESTONE
+  - WOOD
+  - GOLD_ORE
+  - IRON_ORE
+  - COAL_ORE
+  - LOG
+  - LEAVES
+  - SPONGE
+  - GLASS
+  - LAPIS_ORE
+  - LAPIS_BLOCK
+  - DISPENSER
+  - SANDSTONE
+  - NOTE_BLOCK
+  - BED_BLOCK
+  - POWERED_RAIL
+  - DETECTOR_RAIL
+  - PISTON_STICKY_BASE
+  - WEB
+  - PISTON_BASE
+  - PISTON_EXTENSION
+  - WOOL
+  - PISTON_MOVING_PIECE
+  - GOLD_BLOCK
+  - IRON_BLOCK
+  - DOUBLE_STEP
+  - STEP
+  - BRICK
+  - BOOKSHELF
+  - MOSSY_COBBLESTONE
+  - OBSIDIAN
+  - WOOD_STAIRS
+  - CHEST
+  - DIAMOND_ORE
+  - DIAMOND_BLOCK
+  - WORKBENCH
+  - SOIL
+  - FURNACE
+  - BURNING_FURNACE
+  - SIGN_POST
+  - WOODEN_DOOR
+  - LADDER
+  - RAILS
+  - COBBLESTONE_STAIRS
+  - WALL_SIGN
+  - LEVER
+  - STONE_PLATE
+  - IRON_DOOR_BLOCK
+  - WOOD_PLATE
+  - REDSTONE_ORE
+  - GLOWING_REDSTONE_ORE
+  - STONE_BUTTON
+  - ICE
+  - SNOW_BLOCK
+  - CACTUS
+  - CLAY
+  - JUKEBOX
+  - FENCE
+  - NETHERRACK
+  - SOUL_SAND
+  - GLOWSTONE
+  - JACK_O_LANTERN
+  - TRAP_DOOR
+  - SMOOTH_BRICK
+  - HUGE_MUSHROOM_1
+  - HUGE_MUSHROOM_2
+  - IRON_FENCE
+  - THIN_GLASS
+  - FENCE_GATE
+  - BRICK_STAIRS
+  - SMOOTH_STAIRS
+  - MYCEL
+  - NETHER_BRICK
+  - NETHER_FENCE
+  - NETHER_BRICK_STAIRS
+  - ENCHANTMENT_TABLE
+  - BREWING_STAND
+  - CAULDRON
+  - ENDER_STONE
+  - REDSTONE_LAMP_OFF
+  - REDSTONE_LAMP_ON
+  - WOOD_DOUBLE_STEP
+  - WOOD_STEP
+  - SANDSTONE_STAIRS
+  - EMERALD_ORE
+  - ENDER_CHEST
+  - EMERALD_BLOCK
+  - SPRUCE_WOOD_STAIRS
+  - BIRCH_WOOD_STAIRS
+  - JUNGLE_WOOD_STAIRS
+  - BEACON
+  - COBBLE_WALL
+  - WOOD_BUTTON
+  - SKULL
+  - ANVIL
+  - TRAPPED_CHEST
+  - GOLD_PLATE
+  - IRON_PLATE
+  - DAYLIGHT_DETECTOR
+  - REDSTONE_BLOCK
+  - QUARTZ_ORE
+  - HOPPER
+  - QUARTZ_BLOCK
+  - QUARTZ_STAIRS
+  - ACTIVATOR_RAIL
+  - DROPPER
+  - STAINED_CLAY
+  - HAY_BLOCK
+  - CARPET
+  - HARD_CLAY
+  - COAL_BLOCK

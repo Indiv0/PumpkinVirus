@@ -11,4 +11,11 @@ commands:
     description: Controls the PumpkinVirus plugin.
     aliases: [pv, pumpkin_virus, pumpkinVirus]
     usage: |
-      /<command> - Toggles pumpkin spreading.
+      /<command> toggle [world] - Toggles pumpkin spreading (in the current world, unless otherwise specified).
+
+permissions:
+  pumpkinvirus.pumpkinvirus.toggle:
+    children:
+      pumpkinvirus.pumpkinvirus: true
+  pumpkinvirus.spreadvirus:
+    description: Allows the player to spread pumpkins.
