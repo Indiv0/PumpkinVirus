@@ -16,20 +16,6 @@
         <version>0.15</version>
     </parent>
 
-<<<<<<< HEAD
-    <distributionManagement>
-        <repository>
-            <id>archiva.internal</id>
-            <name>Internal Release Repository</name>
-            <url>http://maven.nikitapek.in/repository/internal/</url>
-        </repository>
-        <snapshotRepository>
-            <id>archiva.snapshots</id>
-            <name>Internal Snapshot Repository</name>
-            <url>http://maven.nikitapek.in/repository/snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
-
     <repositories>
         <repository>
             <id>minerap-repo</id>
@@ -52,30 +38,6 @@
         </dependency>
     </dependencies>
 
-=======
-    <repositories>
-        <repository>
-            <id>minerap-repo</id>
-            <name>MinerAp</name>
-            <url>https://www.minerap.com/repository/</url>
-        </repository>
-    </repositories>
-
-    <dependencies>
-        <!-- Spigot -->
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-        </dependency>
-        <!-- Mbapi -->
-        <dependency>
-            <groupId>com.amshulman</groupId>
-            <artifactId>mbapi</artifactId>
-            <scope>compile</scope>
-        </dependency>
-    </dependencies>
-
->>>>>>> 37b2844d948d3a25675413fb9e36a7dda4bf62ae
     <profiles>
         <profile>
             <id>production</id>
@@ -90,8 +52,6 @@
                                 <goals>
                                     <goal>shade</goal>
                                 </goals>
-<<<<<<< HEAD
-=======
                                 <configuration>
                                     <minimizeJar>true</minimizeJar>
                                     <filters>
@@ -103,7 +63,6 @@
                                         </filter>
                                     </filters>
                                 </configuration>
->>>>>>> 37b2844d948d3a25675413fb9e36a7dda4bf62ae
                             </execution>
                         </executions>
                     </plugin>
