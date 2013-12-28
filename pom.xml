@@ -6,7 +6,7 @@
     <groupId>in.nikitapek</groupId>
     <artifactId>pumpkin-virus</artifactId>
     <name>PumpkinVirus</name>
-    <version>${mbapi.version}.0-SNAPSHOT</version>
+    <version>${mbapi.version}.0</version>
     <description>A Bukkit plugin which allows for blocks to spread.</description>
     <url>http://dev.bukkit.org/server-mods/pumpkinvirus/</url>
 
