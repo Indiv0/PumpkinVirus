@@ -1,4 +1,4 @@
-# PumpkinVirus [![Travis CI](https://secure.travis-ci.org/Indiv0/pumpkin-virus.png)](http://travis-ci.org/#!/Indiv0/pumpkin-virus)
+# [INACTIVE] PumpkinVirus [![Travis CI](https://secure.travis-ci.org/Indiv0/pumpkin-virus.png)](http://travis-ci.org/#!/Indiv0/pumpkin-virus)
 
 PumpkinVirus is a plugin for Bukkit which gives players and/or administrators the ability to create a pumpkin "virus" which spreads across the map.
 It is meant to provide a roleplay aspect to a server, and is best suited for apocalyptic servers.
